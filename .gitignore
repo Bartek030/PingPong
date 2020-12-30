@@ -1,2 +1,13 @@
 Plan/
+img/
+snd/
 *.exe
+*.bpr
+*.~bpr
+*.obj
+*.res
+*.tds
+*.dfm
+*.~cpp
+*.~dfm
+*.~h
