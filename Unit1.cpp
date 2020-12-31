@@ -11,6 +11,7 @@ TForm1 *Form1;
 
 int ballTopMove = 5;
 int ballLeftMove = 5;
+bool isBallInGame = true;
 
 void paletteMovement(TObject *Sender, int topMove) {
     TImage *palette = (TImage *)Sender;
@@ -88,24 +89,38 @@ void __fastcall TForm1::secondPaletteDownTimer(TObject *Sender) {
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
-    ball -> Top += ballTopMove;
-    ball -> Left += ballLeftMove;
+    if(isBallInGame) {
+        // RUCH PILKI
+        ball -> Top += ballTopMove;
+        ball -> Left += ballLeftMove;
 
-    if(ball -> Top <= board -> Top + 10 || ball -> Top + ball -> Height >= board -> Height - 10) {
-        ballTopMove = -ballTopMove;
-    }
-
-    if((ball -> Left < firstPalette -> Left + firstPalette -> Width &&
-        ball -> Top + (ball -> Height / 2) > firstPalette -> Top &&
-        ball -> Top + (ball -> Height / 2) < firstPalette -> Top + firstPalette -> Height) ||
-       (ball -> Left + ball -> Width > secondPalette -> Left &&
-        ball -> Top + (ball -> Height / 2) > secondPalette -> Top &&
-        ball -> Top + (ball -> Height / 2) < secondPalette -> Top + secondPalette -> Height))
-    {
-        if(ballLeftMove != 0) {
-            ballLeftMove = -ballLeftMove;
+        // ODBICIE OD GÓRNEJ I DOLNEJ KRAWEDZI
+        if(ball -> Top <= board -> Top + 10 || ball -> Top + ball -> Height >= board -> Height - 10) {
+            ballTopMove = -ballTopMove;
         }
-    }
+
+        // ODBICIE OD LEWEJ PALETKI
+        if (ball -> Left <= firstPalette -> Left + firstPalette -> Width &&
+            ball -> Top + (ball -> Height) >= firstPalette -> Top &&
+            ball -> Top <= firstPalette -> Top + firstPalette -> Height) {
+                ballLeftMove = -ballLeftMove;
+        }
+        // ODBICIE OD PRAWEJ PALETKI
+        else if(ball -> Left + ball -> Width >= secondPalette -> Left &&
+                ball -> Top + (ball -> Height) >= secondPalette -> Top &&
+                ball -> Top <= secondPalette -> Top + secondPalette -> Height) {
+                    ballLeftMove = -ballLeftMove;
+        } else {
+            if(ball -> Left < firstPalette -> Left + firstPalette -> Width || ball -> Left + ball -> Width > secondPalette -> Left) {
+                isBallInGame = false;
+            }
+        }
+   } else {
+        if(ball -> Left > board -> Left && ball -> Left + ball -> Width < board -> Width) {
+            ball -> Top += ballTopMove;
+            ball -> Left += ballLeftMove;
+        }
+   }
 }
 //---------------------------------------------------------------------------
 
