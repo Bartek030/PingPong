@@ -11,6 +11,7 @@ TForm1 *Form1;
 
 int ballTopMove = 5;
 int ballLeftMove = 5;
+int numberOfSecondsToStart = 3;
 bool isBallInGame = true;
 
 void paletteMovement(TObject *Sender, int topMove) {
@@ -125,13 +126,13 @@ void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
 //---------------------------------------------------------------------------
 
 
-void __fastcall TForm1::Button3Click(TObject *Sender)
+void __fastcall TForm1::exitButtonClick(TObject *Sender)
 {
     exit(0);    
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button2Click(TObject *Sender) {
+void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
     AnsiString line1 = "                            STEROWANIE";
     AnsiString line2 = "Gracz 1                                                     Gracz 2";
     AnsiString line3 = "    W                           W GÓRÊ                      8";
@@ -151,6 +152,34 @@ void __fastcall TForm1::Button2Click(TObject *Sender) {
                 + line7 + sLineBreak
                 + line8 + sLineBreak + sLineBreak
                 + line9);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
+    titleImage -> Visible = false;
+    newGameButton -> Visible = false;
+    newGameButton -> Enabled = false;
+    rulesButton -> Visible = false;
+    rulesButton -> Enabled = false;
+    exitButton -> Visible = false;
+    exitButton -> Enabled = false;
+
+    ball -> Visible = true;
+    ball -> Enabled = true;
+    firstPalette -> Visible = true;
+    firstPalette -> Enabled = true;
+    secondPalette -> Visible = true;
+    secondPalette -> Enabled = true;
+    midPoint -> Visible = true;
+    midPoint -> Enabled = true;
+    littlePoint1 -> Visible = true;
+    littlePoint1 -> Enabled = true;
+    littlePoint2 -> Visible = true;
+    littlePoint2 -> Enabled = true;
+    littlePoint3 -> Visible = true;
+    littlePoint3 -> Enabled = true;
+    littlePoint4 -> Visible = true;
+    littlePoint4 -> Enabled = true;
 }
 //---------------------------------------------------------------------------
 
