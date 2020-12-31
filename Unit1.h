@@ -32,6 +32,7 @@ __published:	// IDE-managed Components
     TButton *newGameButton;
     TButton *rulesButton;
     TButton *exitButton;
+    TLabel *counterToStart;
     void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
     void __fastcall FormKeyUp(TObject *Sender, WORD &Key,

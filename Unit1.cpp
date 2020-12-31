@@ -11,7 +11,7 @@ TForm1 *Form1;
 
 int ballTopMove = 5;
 int ballLeftMove = 5;
-int numberOfSecondsToStart = 3;
+int numberOfSecondsToStart;
 bool isBallInGame = true;
 
 void paletteMovement(TObject *Sender, int topMove) {
@@ -156,6 +156,7 @@ void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
+    //WYLACZANIE ELEMENTOW MENU GLOWNEGO
     titleImage -> Visible = false;
     newGameButton -> Visible = false;
     newGameButton -> Enabled = false;
@@ -164,6 +165,7 @@ void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
     exitButton -> Visible = false;
     exitButton -> Enabled = false;
 
+    // WLACZANIE ELEMENTÓW GRY
     ball -> Visible = true;
     ball -> Enabled = true;
     firstPalette -> Visible = true;
@@ -180,6 +182,38 @@ void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
     littlePoint3 -> Enabled = true;
     littlePoint4 -> Visible = true;
     littlePoint4 -> Enabled = true;
+
+    //USTAWIENIE PILKI I PALETEK W POZYCJI SRODKOWEJ
+    ball -> Left = (board -> Width / 2) - (ball -> Width / 2);
+    ball -> Top =  (board -> Height / 2) - (ball -> Height / 2);
+
+    firstPalette -> Top = (board -> Height / 2) - (firstPalette -> Height / 2);
+    secondPalette -> Top = (board -> Height / 2) - (secondPalette -> Height / 2);
+
+    // ODLICZANIE DO STARTU
+    numberOfSecondsToStart = 3;
+    counterToStart -> Enabled = true;
+    counterToStart -> Visible = true;
+    while(numberOfSecondsToStart >= 0) {
+        if(numberOfSecondsToStart > 0) {
+            counterToStart -> Caption = IntToStr(numberOfSecondsToStart);
+            Application -> ProcessMessages();
+            Sleep(1000);
+            numberOfSecondsToStart--;
+        } else {
+            counterToStart -> Caption = "START";
+            Application -> ProcessMessages();
+            Sleep(1000);
+            counterToStart -> Enabled = false;
+            counterToStart -> Visible = false;
+            numberOfSecondsToStart--;
+        }
+    }
+
+    // URUCHOMIENIE PILKI
+    
+
 }
 //---------------------------------------------------------------------------
+
 
