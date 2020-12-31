@@ -95,7 +95,7 @@ void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
         ball -> Left += ballLeftMove;
 
         // ODBICIE OD GÓRNEJ I DOLNEJ KRAWEDZI
-        if(ball -> Top <= board -> Top + 10 || ball -> Top + ball -> Height >= board -> Height - 10) {
+        if(ball -> Top <= board -> Top + 5 || ball -> Top + ball -> Height >= board -> Height - 5) {
             ballTopMove = -ballTopMove;
         }
 
@@ -116,11 +116,41 @@ void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
             }
         }
    } else {
-        if(ball -> Left > board -> Left && ball -> Left + ball -> Width < board -> Width) {
+        if(ball -> Left > board -> Left + 5 && ball -> Left + ball -> Width < board -> Width - 5) {
             ball -> Top += ballTopMove;
             ball -> Left += ballLeftMove;
         }
    }
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+    exit(0);    
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender) {
+    AnsiString line1 = "                            STEROWANIE";
+    AnsiString line2 = "Gracz 1                                                     Gracz 2";
+    AnsiString line3 = "    W                           W GÓRÊ                      8";
+    AnsiString line4 = "     S                             W DÓ£                       2";
+    AnsiString line5 = "SPACJA                      BONUS                   LCTRL";
+    AnsiString line6 = "Gra toczy siê do 3 wygranych pi³ek.";
+    AnsiString line7 = "Traf w œrodek aby aktywowaæ losowy bonus.";
+    AnsiString line8 = "Traf 3 razy w ma³e pola aby otrzymaæ losowy bonus.";
+    AnsiString line9 = "                                Mi³ej zabawy! :-)";
+
+    ShowMessage(line1 + sLineBreak
+                + line2 + sLineBreak
+                + line3 + sLineBreak
+                + line4 + sLineBreak
+                + line5 + sLineBreak + sLineBreak
+                + line6 + sLineBreak
+                + line7 + sLineBreak
+                + line8 + sLineBreak + sLineBreak
+                + line9);
 }
 //---------------------------------------------------------------------------
 
