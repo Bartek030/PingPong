@@ -29,7 +29,17 @@ void hideMainMenuElements() {
     Form1 -> exitButton -> Enabled = false;
 }
 
-void showGameElements() {
+void showMainMenuElements() {
+    Form1 -> titleImage -> Visible = true;
+    Form1 -> newGameButton -> Visible = true;
+    Form1 -> newGameButton -> Enabled = true;
+    Form1 -> rulesButton -> Visible = true;
+    Form1 -> rulesButton -> Enabled = true;
+    Form1 -> exitButton -> Visible = true;
+    Form1 -> exitButton -> Enabled = true;
+}
+
+ void showGameElements() {
     Form1 -> ball -> Visible = true;
     Form1 -> ball -> Enabled = true;
     Form1 -> firstPalette -> Visible = true;
@@ -46,6 +56,25 @@ void showGameElements() {
     Form1 -> littlePoint3 -> Enabled = true;
     Form1 -> littlePoint4 -> Visible = true;
     Form1 -> littlePoint4 -> Enabled = true;
+}
+
+void hideGameElements() {
+    Form1 -> ball -> Visible = false;
+    Form1 -> ball -> Enabled = false;
+    Form1 -> firstPalette -> Visible = false;
+    Form1 -> firstPalette -> Enabled = false;
+    Form1 -> secondPalette -> Visible = false;
+    Form1 -> secondPalette -> Enabled = false;
+    Form1 -> midPoint -> Visible = false;
+    Form1 -> midPoint -> Enabled = false;
+    Form1 -> littlePoint1 -> Visible = false;
+    Form1 -> littlePoint1 -> Enabled = false;
+    Form1 -> littlePoint2 -> Visible = false;
+    Form1 -> littlePoint2 -> Enabled = false;
+    Form1 -> littlePoint3 -> Visible = false;
+    Form1 -> littlePoint3 -> Enabled = false;
+    Form1 -> littlePoint4 -> Visible = false;
+    Form1 -> littlePoint4 -> Enabled = false;
 }
 
 void setBallAndPalettesInMiddlePosition() {
@@ -103,6 +132,15 @@ void startNewRound () {
     isBallInGame = true;
 }
 
+void showMatchSummary() {
+    if(firstPlayerPoints > secondPlayerPoints) {
+        Form1 -> pointInfo -> Caption = "Mecz wygrywa gracz pierwszy";
+    } else {
+        Form1 -> pointInfo -> Caption = "Mecz wygrywa gracz drugi";
+    }
+    Form1 -> pointInfo2 -> Caption = "Wynikiem:";
+}
+
 void showMatchResult() {
     Form1 -> pointInfo -> Visible = true;
     if(Form1 -> ball -> Left <= Form1 -> board -> Left + 5) {
@@ -123,7 +161,7 @@ void showMatchResult() {
     Form1 -> mainMenuButton -> Visible = true;
 
     if(firstPlayerPoints >= 3 || secondPlayerPoints >= 3) {
-        //showMatchSummary();
+        showMatchSummary();
     } else {
         Form1 -> newRoundButton -> Enabled = true;
         Form1 -> newRoundButton -> Visible = true;
@@ -302,6 +340,13 @@ void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
 
 void __fastcall TForm1::newRoundButtonClick(TObject *Sender) {
     startNewRound();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::mainMenuButtonClick(TObject *Sender) {
+    hideGameElements();
+    showMainMenuElements();
 }
 //---------------------------------------------------------------------------
 
