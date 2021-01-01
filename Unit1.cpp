@@ -9,8 +9,8 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-int ballTopMove = 5;
-int ballLeftMove = 5;
+int ballTopMove = 0;
+int ballLeftMove = 0;
 int paletteTopMove = 5;
 int numberOfSecondsToStart;
 bool isBallInGame = true;
@@ -18,6 +18,90 @@ int firstPlayerPoints = 0;
 int secondPlayerPoints = 0;
 int firstPlayerBonus = 0;
 int secondPlayerBonus = 0;
+
+void hideMainMenuElements() {
+    Form1 -> titleImage -> Visible = false;
+    Form1 -> newGameButton -> Visible = false;
+    Form1 -> newGameButton -> Enabled = false;
+    Form1 -> rulesButton -> Visible = false;
+    Form1 -> rulesButton -> Enabled = false;
+    Form1 -> exitButton -> Visible = false;
+    Form1 -> exitButton -> Enabled = false;
+}
+
+void showGameElements() {
+    Form1 -> ball -> Visible = true;
+    Form1 -> ball -> Enabled = true;
+    Form1 -> firstPalette -> Visible = true;
+    Form1 -> firstPalette -> Enabled = true;
+    Form1 -> secondPalette -> Visible = true;
+    Form1 -> secondPalette -> Enabled = true;
+    Form1 -> midPoint -> Visible = true;
+    Form1 -> midPoint -> Enabled = true;
+    Form1 -> littlePoint1 -> Visible = true;
+    Form1 -> littlePoint1 -> Enabled = true;
+    Form1 -> littlePoint2 -> Visible = true;
+    Form1 -> littlePoint2 -> Enabled = true;
+    Form1 -> littlePoint3 -> Visible = true;
+    Form1 -> littlePoint3 -> Enabled = true;
+    Form1 -> littlePoint4 -> Visible = true;
+    Form1 -> littlePoint4 -> Enabled = true;
+}
+
+void setBallAndPalettesInMiddlePosition() {
+    Form1 -> ball -> Left = (Form1 -> board -> Width / 2) - (Form1 -> ball -> Width / 2);
+    Form1 -> ball -> Top =  (Form1 -> board -> Height / 2) - (Form1 -> ball -> Height / 2);
+
+    Form1 -> firstPalette -> Top = (Form1 -> board -> Height / 2) - (Form1 -> firstPalette -> Height / 2);
+    Form1 -> secondPalette -> Top = (Form1 -> board -> Height / 2) - (Form1 -> secondPalette -> Height / 2);
+}
+
+void countDownToStart() {
+    numberOfSecondsToStart = 3;
+    Form1 -> counterToStart -> Enabled = true;
+    Form1 -> counterToStart -> Visible = true;
+    while(numberOfSecondsToStart >= 0) {
+        if(numberOfSecondsToStart > 0) {
+            Form1 -> counterToStart -> Caption = IntToStr(numberOfSecondsToStart);
+            Application -> ProcessMessages();
+            Sleep(1000);
+            numberOfSecondsToStart--;
+        } else {
+            Form1 -> counterToStart -> Caption = "START";
+            Application -> ProcessMessages();
+            Sleep(1000);
+            Form1 -> counterToStart -> Enabled = false;
+            Form1 -> counterToStart -> Visible = false;
+            numberOfSecondsToStart--;
+        }
+    }
+}
+
+void setBallMovement() {
+    randomize();
+    while(ballTopMove == 0) {
+        ballTopMove = random(11) - 5;
+    }
+    while(ballLeftMove == 0) {
+        ballLeftMove = random(11) - 5;
+    }
+    Form1 -> ballTimer -> Enabled = true;
+}
+
+void startNewRound () {
+    Form1 -> mainMenuButton -> Enabled = false;
+    Form1 -> mainMenuButton -> Visible = false;
+    Form1 -> newRoundButton -> Enabled = false;
+    Form1 -> newRoundButton -> Visible = false;
+    Form1 -> pointInfo -> Visible = false;
+    Form1 -> pointInfo2 -> Visible = false;
+    Form1 -> result -> Visible = false;
+
+    setBallAndPalettesInMiddlePosition();
+    countDownToStart();
+    setBallMovement();
+    isBallInGame = true;
+}
 
 void showMatchResult() {
     Form1 -> pointInfo -> Visible = true;
@@ -32,6 +116,18 @@ void showMatchResult() {
     Form1 -> result -> Visible = true;
     Form1 -> result -> Caption = IntToStr(firstPlayerPoints) + " : " + IntToStr(secondPlayerPoints);
 
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Form1 -> mainMenuButton -> Enabled = true;
+    Form1 -> mainMenuButton -> Visible = true;
+
+    if(firstPlayerPoints >= 3 || secondPlayerPoints >= 3) {
+        //showMatchSummary();
+    } else {
+        Form1 -> newRoundButton -> Enabled = true;
+        Form1 -> newRoundButton -> Visible = true;
+    }
 }
 
 void paletteMovement(TObject *Sender, int topMove) {
@@ -42,6 +138,7 @@ void paletteMovement(TObject *Sender, int topMove) {
 void ballMovement(TObject *Sender, TObject *Sender2) {
     TImage *firstPalette = (TImage *)Sender;
     TImage *secondPalette = (TImage *)Sender2;
+
     if(isBallInGame) {
         // RUCH PILKI
         Form1 -> ball -> Top += ballTopMove;
@@ -181,39 +278,10 @@ void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
-    //WYLACZANIE ELEMENTOW MENU GLOWNEGO
-    titleImage -> Visible = false;
-    newGameButton -> Visible = false;
-    newGameButton -> Enabled = false;
-    rulesButton -> Visible = false;
-    rulesButton -> Enabled = false;
-    exitButton -> Visible = false;
-    exitButton -> Enabled = false;
-
-    // WLACZANIE ELEMENTÓW GRY
-    ball -> Visible = true;
-    ball -> Enabled = true;
-    firstPalette -> Visible = true;
-    firstPalette -> Enabled = true;
-    secondPalette -> Visible = true;
-    secondPalette -> Enabled = true;
-    midPoint -> Visible = true;
-    midPoint -> Enabled = true;
-    littlePoint1 -> Visible = true;
-    littlePoint1 -> Enabled = true;
-    littlePoint2 -> Visible = true;
-    littlePoint2 -> Enabled = true;
-    littlePoint3 -> Visible = true;
-    littlePoint3 -> Enabled = true;
-    littlePoint4 -> Visible = true;
-    littlePoint4 -> Enabled = true;
-
-    //USTAWIENIE PILKI I PALETEK W POZYCJI SRODKOWEJ
-    ball -> Left = (board -> Width / 2) - (ball -> Width / 2);
-    ball -> Top =  (board -> Height / 2) - (ball -> Height / 2);
-
-    firstPalette -> Top = (board -> Height / 2) - (firstPalette -> Height / 2);
-    secondPalette -> Top = (board -> Height / 2) - (secondPalette -> Height / 2);
+    hideMainMenuElements();
+    showGameElements();
+    setBallAndPalettesInMiddlePosition();
+    isBallInGame = true;
 
     //ZEROWANIE PUNKTOW
     firstPlayerPoints = 0;
@@ -221,34 +289,19 @@ void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
     firstPlayerBonus = 0;
     secondPlayerBonus = 0;
 
-    // ODLICZANIE DO STARTU
-    numberOfSecondsToStart = 3;
-    counterToStart -> Enabled = true;
-    counterToStart -> Visible = true;
-    while(numberOfSecondsToStart >= 0) {
-        if(numberOfSecondsToStart > 0) {
-            counterToStart -> Caption = IntToStr(numberOfSecondsToStart);
-            Application -> ProcessMessages();
-            Sleep(1000);
-            numberOfSecondsToStart--;
-        } else {
-            counterToStart -> Caption = "START";
-            Application -> ProcessMessages();
-            Sleep(1000);
-            counterToStart -> Enabled = false;
-            counterToStart -> Visible = false;
-            numberOfSecondsToStart--;
-        }
-    }
-
-    // URUCHOMIENIE PILKI
-    ballTimer -> Enabled = true;
+    countDownToStart();
+    setBallMovement();
 }
 //---------------------------------------------------------------------------
 
 
 void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
     ballMovement(firstPalette, secondPalette);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::newRoundButtonClick(TObject *Sender) {
+    startNewRound();
 }
 //---------------------------------------------------------------------------
 
