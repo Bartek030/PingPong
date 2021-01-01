@@ -33,6 +33,11 @@ __published:	// IDE-managed Components
     TButton *rulesButton;
     TButton *exitButton;
     TLabel *counterToStart;
+    TLabel *pointInfo;
+    TLabel *pointInfo2;
+    TLabel *result;
+    TButton *Button1;
+    TButton *Button3;
     void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
     void __fastcall FormKeyUp(TObject *Sender, WORD &Key,
@@ -41,10 +46,10 @@ __published:	// IDE-managed Components
     void __fastcall firstPaletteDownTimer(TObject *Sender);
     void __fastcall secondPaletteUpTimer(TObject *Sender);
     void __fastcall secondPaletteDownTimer(TObject *Sender);
-    void __fastcall ballTimerTimer(TObject *Sender);
     void __fastcall exitButtonClick(TObject *Sender);
     void __fastcall rulesButtonClick(TObject *Sender);
     void __fastcall newGameButtonClick(TObject *Sender);
+    void __fastcall ballTimerTimer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

@@ -11,12 +11,72 @@ TForm1 *Form1;
 
 int ballTopMove = 5;
 int ballLeftMove = 5;
+int paletteTopMove = 5;
 int numberOfSecondsToStart;
 bool isBallInGame = true;
+int firstPlayerPoints = 0;
+int secondPlayerPoints = 0;
+int firstPlayerBonus = 0;
+int secondPlayerBonus = 0;
+
+void showMatchResult() {
+    Form1 -> pointInfo -> Visible = true;
+    if(Form1 -> ball -> Left <= Form1 -> board -> Left + 5) {
+        secondPlayerPoints++;
+        Form1 -> pointInfo -> Caption = "Punkt dla drugiego gracza";
+    } else if(Form1 -> ball -> Left + Form1 -> ball -> Width >= Form1 -> board -> Width -5) {
+        firstPlayerPoints++;
+        Form1 -> pointInfo -> Caption = "Punkt dla pierwszego gracza";
+    }
+    Form1 -> pointInfo2 -> Visible = true;
+    Form1 -> result -> Visible = true;
+    Form1 -> result -> Caption = IntToStr(firstPlayerPoints) + " : " + IntToStr(secondPlayerPoints);
+
+}
 
 void paletteMovement(TObject *Sender, int topMove) {
     TImage *palette = (TImage *)Sender;
     palette -> Top += topMove;
+}
+
+void ballMovement(TObject *Sender, TObject *Sender2) {
+    TImage *firstPalette = (TImage *)Sender;
+    TImage *secondPalette = (TImage *)Sender2;
+    if(isBallInGame) {
+        // RUCH PILKI
+        Form1 -> ball -> Top += ballTopMove;
+        Form1 -> ball -> Left += ballLeftMove;
+
+        // ODBICIE OD GORNEJ I DOLNEJ KRAWEDZI
+        if(Form1 -> ball -> Top <= Form1 -> board -> Top + 5 || Form1 -> ball -> Top + Form1 -> ball -> Height >= Form1 -> board -> Height - 5) {
+            ballTopMove = -ballTopMove;
+        }
+
+        // ODBICIE OD LEWEJ PALETKI
+        if (Form1 -> ball -> Left <= firstPalette -> Left + firstPalette -> Width &&
+            Form1 -> ball -> Top + (Form1 -> ball -> Height) >= firstPalette -> Top &&
+            Form1 -> ball -> Top <= firstPalette -> Top + firstPalette -> Height) {
+                ballLeftMove = -ballLeftMove;
+        }
+        // ODBICIE OD PRAWEJ PALETKI
+        else if(Form1 -> ball -> Left + Form1 -> ball -> Width >= secondPalette -> Left &&
+                Form1 -> ball -> Top + (Form1 -> ball -> Height) >= secondPalette -> Top &&
+                Form1 -> ball -> Top <= secondPalette -> Top + secondPalette -> Height) {
+                    ballLeftMove = -ballLeftMove;
+        } else {
+            if(Form1 -> ball -> Left < firstPalette -> Left + firstPalette -> Width || Form1 -> ball -> Left + Form1 -> ball -> Width > secondPalette -> Left) {
+                isBallInGame = false;
+            }
+        }
+   } else {
+        if(Form1 -> ball -> Left > Form1 -> board -> Left + 5 && Form1 -> ball -> Left + Form1 -> ball -> Width < Form1 -> board -> Width - 5) {
+            Form1 -> ball -> Top += ballTopMove;
+            Form1 -> ball -> Left += ballLeftMove;
+        } else {
+            Form1 -> ballTimer -> Enabled = false;
+            showMatchResult();
+        }
+   }
 }
 
 //---------------------------------------------------------------------------
@@ -63,67 +123,32 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
 
 void __fastcall TForm1::firstPaletteUpTimer(TObject *Sender) {
     if(firstPalette -> Top >= board -> Top + 10) {
-        paletteMovement(firstPalette, -5);
+        paletteMovement(firstPalette, -paletteTopMove);
     }
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::firstPaletteDownTimer(TObject *Sender) {
     if(firstPalette -> Top + firstPalette -> Height <= board -> Height - 10) {
-        paletteMovement(firstPalette, 5);
+        paletteMovement(firstPalette, paletteTopMove);
     }
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::secondPaletteUpTimer(TObject *Sender) {
     if(secondPalette -> Top >= board -> Top + 10) {
-        paletteMovement(secondPalette, -5);
+        paletteMovement(secondPalette, -paletteTopMove);
     }
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::secondPaletteDownTimer(TObject *Sender) {
     if(secondPalette -> Top + secondPalette -> Height <= board -> Height - 10) {
-        paletteMovement(secondPalette, 5);
+        paletteMovement(secondPalette, paletteTopMove);
     }
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
-    if(isBallInGame) {
-        // RUCH PILKI
-        ball -> Top += ballTopMove;
-        ball -> Left += ballLeftMove;
-
-        // ODBICIE OD GÓRNEJ I DOLNEJ KRAWEDZI
-        if(ball -> Top <= board -> Top + 5 || ball -> Top + ball -> Height >= board -> Height - 5) {
-            ballTopMove = -ballTopMove;
-        }
-
-        // ODBICIE OD LEWEJ PALETKI
-        if (ball -> Left <= firstPalette -> Left + firstPalette -> Width &&
-            ball -> Top + (ball -> Height) >= firstPalette -> Top &&
-            ball -> Top <= firstPalette -> Top + firstPalette -> Height) {
-                ballLeftMove = -ballLeftMove;
-        }
-        // ODBICIE OD PRAWEJ PALETKI
-        else if(ball -> Left + ball -> Width >= secondPalette -> Left &&
-                ball -> Top + (ball -> Height) >= secondPalette -> Top &&
-                ball -> Top <= secondPalette -> Top + secondPalette -> Height) {
-                    ballLeftMove = -ballLeftMove;
-        } else {
-            if(ball -> Left < firstPalette -> Left + firstPalette -> Width || ball -> Left + ball -> Width > secondPalette -> Left) {
-                isBallInGame = false;
-            }
-        }
-   } else {
-        if(ball -> Left > board -> Left + 5 && ball -> Left + ball -> Width < board -> Width - 5) {
-            ball -> Top += ballTopMove;
-            ball -> Left += ballLeftMove;
-        }
-   }
-}
-//---------------------------------------------------------------------------
 
 
 void __fastcall TForm1::exitButtonClick(TObject *Sender)
@@ -190,6 +215,12 @@ void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
     firstPalette -> Top = (board -> Height / 2) - (firstPalette -> Height / 2);
     secondPalette -> Top = (board -> Height / 2) - (secondPalette -> Height / 2);
 
+    //ZEROWANIE PUNKTOW
+    firstPlayerPoints = 0;
+    secondPlayerPoints = 0;
+    firstPlayerBonus = 0;
+    secondPlayerBonus = 0;
+
     // ODLICZANIE DO STARTU
     numberOfSecondsToStart = 3;
     counterToStart -> Enabled = true;
@@ -211,9 +242,13 @@ void __fastcall TForm1::newGameButtonClick(TObject *Sender) {
     }
 
     // URUCHOMIENIE PILKI
-    
-
+    ballTimer -> Enabled = true;
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TForm1::ballTimerTimer(TObject *Sender) {
+    ballMovement(firstPalette, secondPalette);
+}
+//---------------------------------------------------------------------------
 
