@@ -290,6 +290,28 @@ void countBonusPoints() {
     }
 }
 
+bool ballHitPaletteCenter(TObject *Sender){
+    TImage *palette = (TImage *)Sender;
+    if(palette -> Top + (palette -> Height / 2) >= Form1 -> ball -> Top && palette -> Top + (palette -> Height / 2) <= Form1 -> ball -> Top + Form1 -> ball -> Height) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void increaseBallSpeed() {
+    if(ballLeftMove >= 0) {
+            ballLeftMove += 1;
+        } else if(ballLeftMove < 0) {
+            ballLeftMove -= 1;
+        }
+        if(ballTopMove >= 0) {
+            ballTopMove += 1;
+        } else if(ballTopMove < 0) {
+            ballTopMove -= 1;
+        }
+}
+
 void paletteMovement(TObject *Sender, int topMove) {
     TImage *palette = (TImage *)Sender;
     palette -> Top += topMove;
@@ -315,6 +337,9 @@ void ballMovement(TObject *Sender, TObject *Sender2) {
             Form1 -> ball -> Top <= firstPalette -> Top + firstPalette -> Height) {
                 ballLeftMove = -ballLeftMove;
                 whoHitTheBall = '1';
+                if(ballHitPaletteCenter(firstPalette)) {
+                    increaseBallSpeed();
+                }
         }
         // ODBICIE OD PRAWEJ PALETKI
         else if(Form1 -> ball -> Left + Form1 -> ball -> Width >= secondPalette -> Left &&
@@ -322,6 +347,9 @@ void ballMovement(TObject *Sender, TObject *Sender2) {
                 Form1 -> ball -> Top <= secondPalette -> Top + secondPalette -> Height) {
                     ballLeftMove = -ballLeftMove;
                     whoHitTheBall = '2';
+                    if(ballHitPaletteCenter(secondPalette)) {
+                    increaseBallSpeed();
+                }
         } else {
             if(Form1 -> ball -> Left < firstPalette -> Left + firstPalette -> Width || Form1 -> ball -> Left + Form1 -> ball -> Width > secondPalette -> Left) {
                 isBallInGame = false;
