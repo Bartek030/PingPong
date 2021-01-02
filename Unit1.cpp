@@ -12,7 +12,7 @@ TForm1 *Form1;
 int ballTopMove = 0;
 int ballLeftMove = 0;
 int paletteTopMove = 5;
-int numberOfSecondsToStart;
+int numberOfSecondsToStart = 0;
 bool isBallInGame = true;
 int firstPlayerPoints = 0;
 int secondPlayerPoints = 0;
@@ -74,7 +74,13 @@ void hideGameElements() {
     Form1 -> littlePoint3 -> Visible = false;
     Form1 -> littlePoint3 -> Enabled = false;
     Form1 -> littlePoint4 -> Visible = false;
-    Form1 -> littlePoint4 -> Enabled = false;
+    Form1 -> pointInfo -> Visible = false;
+    Form1 -> pointInfo2 -> Visible = false;
+    Form1 -> result -> Visible = false;
+    Form1 -> mainMenuButton -> Enabled = false;
+    Form1 -> mainMenuButton -> Visible = false;
+    Form1 -> newRoundButton -> Enabled = false;
+    Form1 -> newRoundButton -> Visible = false;
 }
 
 void setBallAndPalettesInMiddlePosition() {
