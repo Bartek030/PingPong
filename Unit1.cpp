@@ -2,6 +2,7 @@
 
 #include <vcl.h>
 #pragma hdrstop
+#include "mmsystem.h"
 
 #include "Unit1.h"
 //---------------------------------------------------------------------------
@@ -109,6 +110,7 @@ void setBallAndPalettesInMiddlePosition() {
 
 void countDownToStart() {
     numberOfSecondsToStart = 3;
+    sndPlaySound("snd/countdown.wav", SND_ASYNC);
     Form1 -> counterToStart -> Enabled = true;
     Form1 -> counterToStart -> Visible = true;
     while(numberOfSecondsToStart >= 0) {
@@ -217,6 +219,7 @@ void startNewRound () {
 }
 
 void showMatchSummary() {
+    sndPlaySound("snd/endGame.wav", SND_ASYNC);
     if(firstPlayerPoints > secondPlayerPoints) {
         Form1 -> pointInfo -> Caption = "Mecz wygrywa gracz pierwszy";
     } else {
@@ -329,6 +332,7 @@ void ballMovement(TObject *Sender, TObject *Sender2) {
         // ODBICIE OD GORNEJ I DOLNEJ KRAWEDZI
         if(Form1 -> ball -> Top <= Form1 -> board -> Top + 5 || Form1 -> ball -> Top + Form1 -> ball -> Height >= Form1 -> board -> Height - 5) {
             ballTopMove = -ballTopMove;
+            sndPlaySound("snd/boardHit.wav", SND_ASYNC);
         }
 
         // ODBICIE OD LEWEJ PALETKI
@@ -337,6 +341,7 @@ void ballMovement(TObject *Sender, TObject *Sender2) {
             Form1 -> ball -> Top <= firstPalette -> Top + firstPalette -> Height) {
                 ballLeftMove = -ballLeftMove;
                 whoHitTheBall = '1';
+                sndPlaySound("snd/paletteHit.wav", SND_ASYNC);
                 if(ballHitPaletteCenter(firstPalette)) {
                     increaseBallSpeed();
                 }
@@ -347,6 +352,7 @@ void ballMovement(TObject *Sender, TObject *Sender2) {
                 Form1 -> ball -> Top <= secondPalette -> Top + secondPalette -> Height) {
                     ballLeftMove = -ballLeftMove;
                     whoHitTheBall = '2';
+                    sndPlaySound("snd/paletteHit.wav", SND_ASYNC);
                     if(ballHitPaletteCenter(secondPalette)) {
                     increaseBallSpeed();
                 }
@@ -414,9 +420,11 @@ void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
     }
 
     if(firstPlayerBonus >= 2 && !(bonusTimer -> Enabled) && (Key == 'a' || Key == 'A') && whoHitTheBall == '1') {
+        Form1 -> firstPlayerBonusImage -> Picture -> LoadFromFile("img/aktywnyBonus.bmp");
         randomBonusActivation();
     }
     if(secondPlayerBonus >= 2 && !(bonusTimer -> Enabled) && Key == VK_LEFT && whoHitTheBall == '2') {
+        Form1 -> secondPlayerBonusImage -> Picture -> LoadFromFile("img/aktywnyBonus.bmp");
         randomBonusActivation();
     }
 }
