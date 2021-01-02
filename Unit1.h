@@ -38,6 +38,9 @@ __published:	// IDE-managed Components
     TLabel *result;
     TButton *newRoundButton;
     TButton *mainMenuButton;
+    TTimer *bonusTimer;
+    TImage *firstPlayerBonusImage;
+    TImage *secondPlayerBonusImage;
     void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
     void __fastcall FormKeyUp(TObject *Sender, WORD &Key,
@@ -52,6 +55,7 @@ __published:	// IDE-managed Components
     void __fastcall ballTimerTimer(TObject *Sender);
     void __fastcall newRoundButtonClick(TObject *Sender);
     void __fastcall mainMenuButtonClick(TObject *Sender);
+    void __fastcall bonusTimerTimer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
