@@ -506,13 +506,14 @@ void __fastcall TForm1::exitButtonClick(TObject *Sender)
 void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
     AnsiString line1 = "                            STEROWANIE";
     AnsiString line2 = "Gracz 1                                                     Gracz 2";
-    AnsiString line3 = "    W                           W GÓRÊ                      8";
-    AnsiString line4 = "     S                             W DÓ£                       2";
-    AnsiString line5 = "SPACJA                      BONUS                   LCTRL";
+    AnsiString line3 = "    W                           W GÓRÊ                     W GÓRÊ";
+    AnsiString line4 = "     S                             W DÓ£                       W DÓ£";
+    AnsiString line5 = "     A                            BONUS                      W LEWO";
     AnsiString line6 = "Gra toczy siê do 3 wygranych pi³ek.";
     AnsiString line7 = "Traf w œrodek aby aktywowaæ losowy bonus.";
     AnsiString line8 = "Traf 2 razy w ma³e pola aby otrzymaæ losowy bonus.";
-    AnsiString line9 = "                                Mi³ej zabawy! :-)";
+    AnsiString line9 = "Ostro¿nie! U¿yty bonus mo¿e odwróci siê przeciw Tobie :-)";
+    AnsiString line10 = "                                Mi³ej zabawy! :-)";
 
     ShowMessage(line1 + sLineBreak
                 + line2 + sLineBreak
@@ -521,8 +522,9 @@ void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
                 + line5 + sLineBreak + sLineBreak
                 + line6 + sLineBreak
                 + line7 + sLineBreak
-                + line8 + sLineBreak + sLineBreak
-                + line9);
+                + line8 + sLineBreak
+                + line9 + sLineBreak + sLineBreak
+                + line10);
 }
 //---------------------------------------------------------------------------
 
