@@ -100,6 +100,16 @@ void hideGameElements() {
     Form1 -> secondPlayerBonusImage -> Enabled = false;
 }
 
+void hideResultInformationsAndButtons() {
+    Form1 -> mainMenuButton -> Enabled = false;
+    Form1 -> mainMenuButton -> Visible = false;
+    Form1 -> newRoundButton -> Enabled = false;
+    Form1 -> newRoundButton -> Visible = false;
+    Form1 -> pointInfo -> Visible = false;
+    Form1 -> pointInfo2 -> Visible = false;
+    Form1 -> result -> Visible = false;
+}
+
 void setBallAndPalettesInMiddlePosition() {
     Form1 -> ball -> Left = (Form1 -> board -> Width / 2) - (Form1 -> ball -> Width / 2);
     Form1 -> ball -> Top =  (Form1 -> board -> Height / 2) - (Form1 -> ball -> Height / 2);
@@ -170,19 +180,17 @@ void randomBonusActivation() {
         case 1:
             bonusDuration = 5;
             changePalettesMovementDirection();
-            Form1 -> bonusTimer -> Enabled = true;
             break;
         case 2:
             bonusDuration = 5;
             changePaletteToSmallerOne();
-            Form1 -> bonusTimer -> Enabled = true;
             break;
         case 3:
             bonusDuration = 1;
             setBallStartMove();
-            Form1 -> bonusTimer -> Enabled = true;
             break;
     }
+    Form1 -> bonusTimer -> Enabled = true;
 }
 
 void bonusDeactivation() {
@@ -195,13 +203,7 @@ void bonusDeactivation() {
 }
 
 void startNewRound () {
-    Form1 -> mainMenuButton -> Enabled = false;
-    Form1 -> mainMenuButton -> Visible = false;
-    Form1 -> newRoundButton -> Enabled = false;
-    Form1 -> newRoundButton -> Visible = false;
-    Form1 -> pointInfo -> Visible = false;
-    Form1 -> pointInfo2 -> Visible = false;
-    Form1 -> result -> Visible = false;
+    hideResultInformationsAndButtons();
     showBonusPoints();
 
     firstPlayerBonus = 0;
@@ -273,22 +275,23 @@ bool isBallHitPoint(TObject *Sender) {
         }
 }
 
+void updateBonusImage(TObject *Sender, int points) {
+    TImage *image = (TImage *)Sender;
+    if(points == 1) {
+        image -> Picture -> LoadFromFile("img/polowaBonus.bmp");
+    } else if(points == 2) {
+        image -> Picture -> LoadFromFile("img/pelnyBonus.bmp");
+    }
+}
+
 void countBonusPoints() {
     if(isBallHitPoint(Form1 -> littlePoint1) || isBallHitPoint(Form1 -> littlePoint2) || isBallHitPoint(Form1 -> littlePoint3) || isBallHitPoint(Form1 -> littlePoint4)) {
         if(whoHitTheBall == '1'){
             firstPlayerBonus++;
-            if(firstPlayerBonus == 1) {
-                Form1 -> firstPlayerBonusImage -> Picture -> LoadFromFile("img/polowaBonus.bmp");
-            } else if(firstPlayerBonus == 2) {
-                Form1 -> firstPlayerBonusImage -> Picture -> LoadFromFile("img/pelnyBonus.bmp");
-            }
+            updateBonusImage(Form1 -> firstPlayerBonusImage, firstPlayerBonus);
         } else if (whoHitTheBall == '2'){
             secondPlayerBonus++;
-            if(secondPlayerBonus == 1) {
-                Form1 -> secondPlayerBonusImage -> Picture -> LoadFromFile("img/polowaBonus.bmp");
-            } else if(secondPlayerBonus == 2) {
-                Form1 -> secondPlayerBonusImage -> Picture -> LoadFromFile("img/pelnyBonus.bmp");
-            }
+            updateBonusImage(Form1 -> secondPlayerBonusImage, secondPlayerBonus);
         }
     }
 }
@@ -504,16 +507,16 @@ void __fastcall TForm1::exitButtonClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
-    AnsiString line1 = "                            STEROWANIE";
-    AnsiString line2 = "Gracz 1                                                     Gracz 2";
-    AnsiString line3 = "    W                           W GÓRÊ                     W GÓRÊ";
-    AnsiString line4 = "     S                             W DÓ£                       W DÓ£";
-    AnsiString line5 = "     A                            BONUS                      W LEWO";
+    AnsiString line1 = "                                        STEROWANIE";
+    AnsiString line2 = "Gracz 1                                                                      Gracz 2";
+    AnsiString line3 = "    W                                    W GÓRÊ                       W GÓRÊ";
+    AnsiString line4 = "     S                                      W DÓ£                          W DÓ£";
+    AnsiString line5 = "     A                                     BONUS                        W LEWO";
     AnsiString line6 = "Gra toczy siê do 3 wygranych pi³ek.";
     AnsiString line7 = "Traf w œrodek aby aktywowaæ losowy bonus.";
     AnsiString line8 = "Traf 2 razy w ma³e pola aby otrzymaæ losowy bonus.";
     AnsiString line9 = "Ostro¿nie! U¿yty bonus mo¿e odwróci siê przeciw Tobie :-)";
-    AnsiString line10 = "                                Mi³ej zabawy! :-)";
+    AnsiString line10 = "                                   Mi³ej zabawy! :-)";
 
     ShowMessage(line1 + sLineBreak
                 + line2 + sLineBreak
