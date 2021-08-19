@@ -370,6 +370,18 @@ void ballMovement(TObject *Sender, TObject *Sender2) {
         if(isBallHitPoint(Form1 -> midPoint) && !(Form1 -> bonusTimer -> Enabled)) {
             randomBonusActivation();
         }
+
+        // AKTYWACJA BONUSU PO NACISNIECIU KLAWISZA PRZEZ GRACZA
+        if(firstPlayerBonus >= 2 && !(Form1 -> bonusTimer -> Enabled) && GetKeyState(VK_LCONTROL) < 0 && whoHitTheBall == '1') {
+            Form1 -> firstPlayerBonusImage -> Picture -> LoadFromFile("img/aktywnyBonus.bmp");
+            randomBonusActivation();
+
+        }
+        if(secondPlayerBonus >= 2 && !(Form1 -> bonusTimer -> Enabled) && GetKeyState(VK_RCONTROL) < 0 && whoHitTheBall == '2') {
+            Form1 -> secondPlayerBonusImage -> Picture -> LoadFromFile("img/aktywnyBonus.bmp");
+            randomBonusActivation();
+        }
+
    } else {
         if( Form1 -> ball -> Left > Form1 -> board -> Left + 5 && Form1 -> ball -> Left + Form1 -> ball -> Width < Form1 -> board -> Width - 5) {
             Form1 -> ball -> Top += ballTopMove;
@@ -422,14 +434,6 @@ void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
         }
     }
 
-    if(firstPlayerBonus >= 2 && !(bonusTimer -> Enabled) && (Key == 'a' || Key == 'A') && whoHitTheBall == '1') {
-        Form1 -> firstPlayerBonusImage -> Picture -> LoadFromFile("img/aktywnyBonus.bmp");
-        randomBonusActivation();
-    }
-    if(secondPlayerBonus >= 2 && !(bonusTimer -> Enabled) && Key == VK_LEFT && whoHitTheBall == '2') {
-        Form1 -> secondPlayerBonusImage -> Picture -> LoadFromFile("img/aktywnyBonus.bmp");
-        randomBonusActivation();
-    }
 }
 //---------------------------------------------------------------------------
 
@@ -511,7 +515,7 @@ void __fastcall TForm1::rulesButtonClick(TObject *Sender) {
     AnsiString line2 = "Gracz 1                                                                      Gracz 2";
     AnsiString line3 = "    W                                    W GÓRÊ                       W GÓRÊ";
     AnsiString line4 = "     S                                      W DÓ£                          W DÓ£";
-    AnsiString line5 = "     A                                     BONUS                        W LEWO";
+    AnsiString line5 = "  LCTRL                                   BONUS                      RCTRL";
     AnsiString line6 = "Gra toczy siê do 3 wygranych pi³ek.";
     AnsiString line7 = "Traf w œrodek aby aktywowaæ losowy bonus.";
     AnsiString line8 = "Traf 2 razy w ma³e pola aby otrzymaæ losowy bonus.";
